@@ -1,0 +1,105 @@
+import java.util.Arrays;
+
+public class SortComparison {
+
+    // Сортировка пузырьком
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+        boolean swapped;
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // swap arr[j] and arr[j+1]
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+            // Если во внутреннем цикле не было обменов, массив уже отсортирован
+            if (!swapped) break;
+        }
+    }
+
+    // Быстрая сортировка
+    public static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+
+    public static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = (low - 1); // индекс меньшего элемента
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+
+                // swap arr[i] and arr[j]
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        // swap arr[i+1] and arr[high] (или pivot)
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        return i + 1;
+    }
+
+    // Метод для создания случайного массива
+    public static int[] generateRandomArray(int size) {
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = (int) (Math.random() * 10000);
+        }
+        return arr;
+    }
+
+    // Метод для клонирования массива
+    public static int[] cloneArray(int[] arr) {
+        return Arrays.copyOf(arr, arr.length);
+    }
+
+    public static void main(String[] args) {
+        // Маленький массив
+        int[] smallArray = generateRandomArray(100);
+        // Крупный массив
+        int[] largeArray = generateRandomArray(10000);
+
+        // Копии массивов для разных алгоритмов
+        int[] smallArrayForBubbleSort = cloneArray(smallArray);
+        int[] smallArrayForQuickSort = cloneArray(smallArray);
+        int[] largeArrayForBubbleSort = cloneArray(largeArray);
+        int[] largeArrayForQuickSort = cloneArray(largeArray);
+
+        // Сортировка маленького массива
+        long startTime = System.nanoTime();
+        bubbleSort(smallArrayForBubbleSort);
+        long endTime = System.nanoTime();
+        System.out.println("Bubble Sort для маленького массива заняла: " + (endTime - startTime) + " наносекунд");
+
+        startTime = System.nanoTime();
+        quickSort(smallArrayForQuickSort, 0, smallArrayForQuickSort.length - 1);
+        endTime = System.nanoTime();
+        System.out.println("Quick Sort для маленького массива заняла: " + (endTime - startTime) + " наносекунд");
+
+        // Сортировка крупного массива
+        startTime = System.nanoTime();
+        bubbleSort(largeArrayForBubbleSort);
+        endTime = System.nanoTime();
+        System.out.println("Bubble Sort для крупного массива заняла: " + (endTime - startTime) + " наносекунд");
+
+        startTime = System.nanoTime();
+        quickSort(largeArrayForQuickSort, 0, largeArrayForQuickSort.length - 1);
+        endTime = System.nanoTime();
+        System.out.println("Quick Sort для крупного массива заняла: " + (endTime - startTime) + " наносекунд");
+    }
+}
