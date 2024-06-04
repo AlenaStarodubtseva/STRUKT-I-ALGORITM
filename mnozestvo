@@ -1,0 +1,129 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class MySet<T> {
+    private List<T> elements;
+
+    // Конструктор
+    public MySet() {
+        elements = new ArrayList<>();
+    }
+
+    // Метод для добавления элемента в множество
+    public void add(T element) {
+        if (!contains(element)) {
+            elements.add(element);
+        }
+    }
+
+    // Метод для удаления элемента из множества
+    public void remove(T element) {
+        elements.remove(element);
+    }
+
+    // Метод для проверки наличия элемента в множестве
+    public boolean contains(T element) {
+        return elements.contains(element);
+    }
+
+    // Метод для объединения двух множеств
+    public MySet<T> union(MySet<T> otherSet) {
+        MySet<T> resultSet = new MySet<>();
+        for (T element : this.elements) {
+            resultSet.add(element);
+        }
+        for (T element : otherSet.elements) {
+            resultSet.add(element);
+        }
+        return resultSet;
+    }
+
+    // Метод для пересечения двух множеств
+    public MySet<T> intersection(MySet<T> otherSet) {
+        MySet<T> resultSet = new MySet<>();
+        for (T element : this.elements) {
+            if (otherSet.contains(element)) {
+                resultSet.add(element);
+            }
+        }
+        return resultSet;
+    }
+
+    // Метод для разности двух множеств
+    public MySet<T> difference(MySet<T> otherSet) {
+        MySet<T> resultSet = new MySet<>();
+        for (T element : this.elements) {
+            if (!otherSet.contains(element)) {
+                resultSet.add(element);
+            }
+        }
+        return resultSet;
+    }
+
+    // Метод для проверки, является ли текущее множество подмножеством другого множества
+    public boolean isSubset(MySet<T> otherSet) {
+        for (T element : this.elements) {
+            if (!otherSet.contains(element)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Метод для получения количества элементов в множестве
+    public int size() {
+        return elements.size();
+    }
+
+    // Метод для проверки, является ли множество пустым
+    public boolean isEmpty() {
+        return elements.isEmpty();
+    }
+
+    // Метод для очистки множества
+    public void clear() {
+        elements.clear();
+    }
+
+    // Переопределение метода toString для удобного вывода множества
+    @Override
+    public String toString() {
+        return elements.toString();
+    }
+
+    // Основной метод для запуска программы
+    public static void main(String[] args) {
+        MySet<Integer> set1 = new MySet<>();
+        set1.add(1);
+        set1.add(2);
+        set1.add(3);
+        System.out.println("Set1: " + set1);
+
+        MySet<Integer> set2 = new MySet<>();
+        set2.add(3);
+        set2.add(4);
+        set2.add(5);
+        System.out.println("Set2: " + set2);
+
+        MySet<Integer> unionSet = set1.union(set2);
+        System.out.println("Union: " + unionSet);
+
+        MySet<Integer> intersectionSet = set1.intersection(set2);
+        System.out.println("Intersection: " + intersectionSet);
+
+        MySet<Integer> differenceSet = set1.difference(set2);
+        System.out.println("Difference: " + differenceSet);
+
+        System.out.println("Set1 contains 2: " + set1.contains(2));
+        System.out.println("Set1 is subset of Set2: " + set1.isSubset(set2));
+
+        set1.remove(2);
+        System.out.println("Set1 after removing 2: " + set1);
+
+        System.out.println("Set1 size: " + set1.size());
+        System.out.println("Set1 is empty: " + set1.isEmpty());
+
+        set1.clear();
+        System.out.println("Set1 after clearing: " + set1);
+    }
+}
