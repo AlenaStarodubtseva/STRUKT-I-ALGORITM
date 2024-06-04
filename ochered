@@ -1,0 +1,96 @@
+public class MyQueue<T> {
+    private Node<T> front;
+    private Node<T> rear;
+    private int size;
+
+    // Внутренний класс для представления узла очереди
+    private static class Node<T> {
+        private T data;
+        private Node<T> next;
+
+        public Node(T data) {
+            this.data = data;
+        }
+    }
+
+    // Конструктор
+    public MyQueue() {
+        this.front = null;
+        this.rear = null;
+        this.size = 0;
+    }
+
+    // Метод для добавления элемента в очередь (в конец)
+    public void enqueue(T data) {
+        Node<T> newNode = new Node<>(data);
+        if (rear != null) {
+            rear.next = newNode;
+        }
+        rear = newNode;
+        if (front == null) {
+            front = newNode;
+        }
+        size++;
+    }
+
+    // Метод для удаления элемента из очереди (с начала)
+    public T dequeue() {
+        if (isEmpty()) {
+            throw new IllegalStateException("Queue is empty");
+        }
+        T data = front.data;
+        front = front.next;
+        if (front == null) {
+            rear = null;
+        }
+        size--;
+        return data;
+    }
+
+    // Метод для просмотра первого элемента в очереди без удаления
+    public T peek() {
+        if (isEmpty()) {
+            throw new IllegalStateException("Queue is empty");
+        }
+        return front.data;
+    }
+
+    // Метод для проверки, пуста ли очередь
+    public boolean isEmpty() {
+        return front == null;
+    }
+
+    // Метод для получения размера очереди
+    public int size() {
+        return size;
+    }
+
+    // Основной метод для тестирования очереди
+    public static void main(String[] args) {
+        MyQueue<Integer> queue = new MyQueue<>();
+
+        // Добавляем элементы в очередь
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+
+        // Проверяем первый элемент очереди
+        System.out.println("Front element is: " + queue.peek());
+
+        // Удаляем элементы из очереди
+        System.out.println("Dequeued element is: " + queue.dequeue());
+        System.out.println("Dequeued element is: " + queue.dequeue());
+
+        // Проверяем, пуста ли очередь
+        System.out.println("Is queue empty? " + queue.isEmpty());
+
+        // Проверяем первый элемент очереди
+        System.out.println("Front element is: " + queue.peek());
+
+        // Удаляем последний элемент из очереди
+        System.out.println("Dequeued element is: " + queue.dequeue());
+
+        // Проверяем, пуста ли очередь
+        System.out.println("Is queue empty? " + queue.isEmpty());
+    }
+}
