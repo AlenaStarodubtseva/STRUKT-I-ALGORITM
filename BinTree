@@ -1,0 +1,108 @@
+public class BinaryTree {
+
+    // Внутренний класс для представления узла дерева
+    class Node {
+        int key;
+        Node left, right;
+
+        public Node(int item) {
+            key = item;
+            left = right = null;
+        }
+    }
+
+    // Корень дерева
+    Node root;
+
+    // Конструктор
+    BinaryTree() {
+        root = null;
+    }
+
+    // Метод для добавления нового узла
+    void insert(int key) {
+        root = insertRec(root, key);
+    }
+
+    // Рекурсивный метод для добавления нового узла
+    Node insertRec(Node root, int key) {
+        // Если дерево пустое, возвращаем новый узел
+        if (root == null) {
+            root = new Node(key);
+            return root;
+        }
+
+        // Иначе рекурсивно обходим дерево вниз
+        if (key < root.key)
+            root.left = insertRec(root.left, key);
+        else if (key > root.key)
+            root.right = insertRec(root.right, key);
+
+        // Возвращаем (без изменений) указатель узла
+        return root;
+    }
+
+    // Метод для обхода дерева в порядке возрастания (in-order)
+    void inorder() {
+        inorderRec(root);
+    }
+
+    // Рекурсивный метод для обхода дерева в порядке возрастания (in-order)
+    void inorderRec(Node root) {
+        if (root != null) {
+            inorderRec(root.left);
+            System.out.print(root.key + " ");
+            inorderRec(root.right);
+        }
+    }
+
+    // Метод для поиска узла с заданным значением
+    Node search(int key) {
+        return searchRec(root, key);
+    }
+
+    // Рекурсивный метод для поиска узла с заданным значением
+    Node searchRec(Node root, int key) {
+        // Базовый случай: корень пуст или ключ присутствует в корне
+        if (root == null || root.key == key)
+            return root;
+
+        // Ключ больше, чем ключ корня
+        if (root.key < key)
+            return searchRec(root.right, key);
+
+        // Ключ меньше, чем ключ корня
+        return searchRec(root.left, key);
+    }
+
+    // Основной метод для запуска программы
+    public static void main(String[] args) {
+        BinaryTree tree = new BinaryTree();
+
+        /* Давайте создадим следующее бинарное дерево
+                  50
+               /     \
+             30      70
+            /  \    /  \
+          20   40  60   80 */
+
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(80);
+
+        // Обход в порядке возрастания
+        tree.inorder();
+
+        // Поиск узла
+        Node foundNode = tree.search(70);
+        if (foundNode != null) {
+            System.out.println("\nNode found: " + foundNode.key);
+        } else {
+            System.out.println("\nNode not found.");
+        }
+    }
+}
