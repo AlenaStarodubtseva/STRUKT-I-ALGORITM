@@ -1,0 +1,169 @@
+public class BinaryTree {
+
+    // Внутренний класс для представления узла дерева
+    class Node {
+        int key;
+        Node left, right;
+
+        public Node(int item) {
+            key = item;
+            left = right = null;
+        }
+    }
+
+    // Корень дерева
+    Node root;
+
+    // Конструктор
+    BinaryTree() {
+        root = null;
+    }
+
+    // Метод для добавления нового узла
+    void insert(int key) {
+        root = insertRec(root, key);
+    }
+
+    // Рекурсивный метод для добавления нового узла
+    Node insertRec(Node root, int key) {
+        // Если дерево пустое, возвращаем новый узел
+        if (root == null) {
+            root = new Node(key);
+            return root;
+        }
+
+        // Иначе рекурсивно обходим дерево вниз
+        if (key < root.key)
+            root.left = insertRec(root.left, key);
+        else if (key > root.key)
+            root.right = insertRec(root.right, key);
+
+        // Возвращаем (без изменений) указатель узла
+        return root;
+    }
+
+    // Метод для обхода дерева в порядке возрастания (in-order)
+    void inorder() {
+        inorderRec(root);
+    }
+
+    // Рекурсивный метод для обхода дерева в порядке возрастания (in-order)
+    void inorderRec(Node root) {
+        if (root != null) {
+            inorderRec(root.left);
+            System.out.print(root.key + " ");
+            inorderRec(root.right);
+        }
+    }
+
+    // Метод для поиска узла с заданным значением
+    Node search(int key) {
+        return searchRec(root, key);
+    }
+
+    // Рекурсивный метод для поиска узла с заданным значением
+    Node searchRec(Node root, int key) {
+        // Базовый случай: корень пуст или ключ присутствует в корне
+        if (root == null || root.key == key)
+            return root;
+
+        // Ключ больше, чем ключ корня
+        if (root.key < key)
+            return searchRec(root.right, key);
+
+        // Ключ меньше, чем ключ корня
+        return searchRec(root.left, key);
+    }
+
+    // Метод для удаления узла
+    void delete(int key) {
+        root = deleteRec(root, key);
+    }
+
+    // Рекурсивный метод для удаления узла
+    Node deleteRec(Node root, int key) {
+        // Базовый случай: если дерево пустое
+        if (root == null) return root;
+
+        // Рекурсивно обходим дерево вниз
+        if (key < root.key)
+            root.left = deleteRec(root.left, key);
+        else if (key > root.key)
+            root.right = deleteRec(root.right, key);
+
+        // Если ключ совпадает с ключом root, то это узел, который нужно удалить
+        else {
+            // Узел с только одним дочерним узлом или без дочерних узлов
+            if (root.left == null)
+                return root.right;
+            else if (root.right == null)
+                return root.left;
+
+            // Узел с двумя дочерними узлами: получаем inorder-преемника (наименьший в правом поддереве)
+            root.key = minValue(root.right);
+
+            // Удаляем inorder-преемника
+            root.right = deleteRec(root.right, root.key);
+        }
+
+        return root;
+    }
+
+    int minValue(Node root) {
+        int minv = root.key;
+        while (root.left != null) {
+            minv = root.left.key;
+            root = root.left;
+        }
+        return minv;
+    }
+
+    // Основной метод для запуска программы
+    public static void main(String[] args) {
+        BinaryTree tree = new BinaryTree();
+
+        /* Давайте создадим следующее бинарное дерево
+                  50
+               /     \
+             30      70
+            /  \    /  \
+          20   40  60   80 */
+
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(70);
+        tree.insert(60);
+        tree.insert(80);
+
+        // Обход в порядке возрастания
+        System.out.println("Inorder traversal of the given tree:");
+        tree.inorder();
+
+        // Поиск узла
+        System.out.println("\n\nSearching for node with key 70:");
+        Node foundNode = tree.search(70);
+        if (foundNode != null) {
+            System.out.println("Node found: " + foundNode.key);
+        } else {
+            System.out.println("Node not found.");
+        }
+
+        // Удаление узла
+        System.out.println("\nDeleting node with key 20");
+        tree.delete(20);
+        System.out.println("Inorder traversal of the modified tree:");
+        tree.inorder();
+
+        System.out.println("\nDeleting node with key 30");
+        tree.delete(30);
+        System.out.println("Inorder traversal of the modified tree:");
+        tree.inorder();
+
+        System.out.println("\nDeleting node with key 50");
+        tree.delete(50);
+        System.out.println("Inorder traversal of the modified tree:");
+        tree.inorder();
+    }
+}
